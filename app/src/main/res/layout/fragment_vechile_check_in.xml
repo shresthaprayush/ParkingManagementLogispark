@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".fragment.VechileCheckIn">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progressBarActivate"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:elevation="80dp"
+                app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:elevation="20dp"
+                    android:padding="5dp"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextCustomerName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Customer Name"
+                            android:inputType="text"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+                        <!--                        <com.google.android.material.textfield.TextInputLayout-->
+                        <!--                            android:id="@+id/inputCustomerName"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_weight="1"-->
+                        <!--                            app:boxBackgroundMode="outline"-->
+                        <!--                            app:errorEnabled="true"-->
+                        <!--                            app:passwordToggleEnabled="false">-->
+
+
+                        <!--                            <com.google.android.material.textfield.TextInputEditText-->
+                        <!--                                android:id="@+id/editTextCustomerName"-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:ems="10"-->
+                        <!--                                android:hint="Customer Name"-->
+                        <!--                                android:inputType="text"-->
+                        <!--                                android:textColorHighlight="@color/colorPrimaryDark" />-->
+
+
+                        <!--                        </com.google.android.material.textfield.TextInputLayout>-->
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextPanNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Pan Number"
+                            android:inputType="number"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextContactNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Contact Number"
+                            android:inputType="number"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <!--                        <com.google.android.material.textfield.TextInputLayout-->
+                        <!--                            android:id="@+id/inputPanNumber"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_weight="1"-->
+                        <!--                            app:boxBackgroundMode="outline"-->
+                        <!--                            app:errorEnabled="true"-->
+                        <!--                            app:passwordToggleEnabled="false">-->
+
+                        <!--                            <com.google.android.material.textfield.TextInputEditText-->
+                        <!--                                android:id="@+id/editTextPanNumber"-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:ems="10"-->
+                        <!--                                android:hint="Pan Number"-->
+                        <!--                                android:inputType="text"-->
+                        <!--                                android:textColorHighlight="@color/colorPrimaryDark" />-->
+                        <!--                           -->
+
+
+                        <!--                        </com.google.android.material.textfield.TextInputLayout>-->
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextDrivingLicenseNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Driving License Number"
+                            android:inputType="text"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextNationality"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Nationality"
+                            android:inputType="text"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <!--                        <com.google.android.material.textfield.TextInputLayout-->
+                        <!--                            android:id="@+id/inputDrivingLicenseNumber"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_weight="1"-->
+                        <!--                            app:boxBackgroundMode="outline"-->
+                        <!--                            app:errorEnabled="true"-->
+                        <!--                            app:passwordToggleEnabled="false">-->
+
+
+                        <!--                            <com.google.android.material.textfield.TextInputEditText-->
+                        <!--                                android:id="@+id/editTextDrivingLicenseNumber"-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:ems="10"-->
+                        <!--                                android:hint="Drivig License Number"-->
+                        <!--                                android:inputType="text"-->
+                        <!--                                android:textColorHighlight="@color/colorPrimaryDark" />-->
+
+
+                        <!--                        </com.google.android.material.textfield.TextInputLayout>-->
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextVechileNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Vehicle Number"
+                            android:inputType="text"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <!--                        <com.google.android.material.textfield.TextInputLayout-->
+                        <!--                            android:id="@+id/inputVechileNumber"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="5dp"-->
+                        <!--                            android:layout_weight="1"-->
+                        <!--                            app:boxBackgroundMode="outline"-->
+                        <!--                            app:errorEnabled="true"-->
+                        <!--                            app:passwordToggleEnabled="false">-->
+
+
+                        <!--                            <com.google.android.material.textfield.TextInputEditText-->
+                        <!--                                android:id="@+id/editTextVechileNumber"-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:ems="10"-->
+                        <!--                                android:hint="Vechile Number"-->
+                        <!--                                android:inputType="text"-->
+                        <!--                                android:textColorHighlight="@color/colorPrimaryDark" />-->
+
+
+                        <!--                        </com.google.android.material.textfield.TextInputLayout>-->
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextplaceOfOrigin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Place of Origin"
+                            android:inputType="text"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleViewRatesCheckin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutSpinnerHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+
+                            <Spinner
+                                android:id="@+id/spinnerAreaCheckIn"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="2dp"
+                                android:layout_weight="1" />
+
+                            <Spinner
+                                android:id="@+id/spinnerSlotCheckin"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="2dp"
+                                android:layout_weight="1" />
+
+
+                        </LinearLayout>
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextRate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Rate"
+                            android:inputType="text"
+                            android:textColorHighlight="@color/colorPrimaryDark" />
+
+
+                        <!--                        <com.google.android.material.textfield.TextInputLayout-->
+                        <!--                            android:id="@+id/inputTextRate"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_weight="1"-->
+                        <!--                            android:background="@color/white"-->
+                        <!--                            android:hint="Rate"-->
+                        <!--                            app:boxBackgroundMode="outline"-->
+                        <!--                            app:errorEnabled="true"-->
+                        <!--                            app:passwordToggleEnabled="false">-->
+
+
+                        <!--                        </com.google.android.material.textfield.TextInputLayout>-->
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutAdditionalInformation"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+
+                            <RelativeLayout
+                                android:id="@+id/relativelayoutAdditionalOne"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/textViewAccomodation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="Accodomation :"
+                                    android:textColor="@color/blackdark"
+                                    android:textSize="16sp" />
+
+
+                                <CheckBox
+                                    android:id="@+id/checkBoxAccomodation"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="6.5dp"
+                                    android:layout_marginTop="6.5dp"
+                                    android:layout_marginEnd="6.5dp"
+                                    android:layout_marginBottom="6.5dp"
+                                    android:layout_toRightOf="@id/textViewAccomodation" />
+
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/relativelayoutAdditionalTowo"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/textViewWashing"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:text="Washing :"
+                                    android:textColor="@color/blackdark"
+                                    android:textSize="16sp" />
+
+
+                                <CheckBox
+                                    android:id="@+id/checkBoxWashing"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_margin="6.5dp"
+                                    android:layout_toRightOf="@id/textViewWashing" />
+
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <Button
+                    android:id="@+id/buttonCheckIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="100dp"
+                    android:layout_marginRight="100dp"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/button_signup"
+                    android:elevation="30dp"
+                    android:text="Check In "
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:transitionName="logo_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

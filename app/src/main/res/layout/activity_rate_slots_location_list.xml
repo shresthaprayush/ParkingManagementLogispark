@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".main.RatesSlotsLocationList">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:id="@+id/appbarholder"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:id="@+id/tablayout"
+            android:background="@color/wavecolor"
+            app:tabSelectedTextColor="#fff"
+            app:tabIndicatorColor="@color/col2"
+            app:tabTextColor="@color/faded_grey"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_below="@+id/appbarholder"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/lastUpdated"
+        android:id="@+id/view_rate_slots_location_list"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:textSize="15sp"
+        android:textColor="@color/blackdark"
+        android:textStyle="italic"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastUpdated"/>
+
+</RelativeLayout>

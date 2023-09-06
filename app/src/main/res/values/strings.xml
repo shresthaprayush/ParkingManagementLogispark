@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Parking Management Lite</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_today">Vehicle Slots</string>
+    <string name="title_qr">Scan Code</string>
+    <string name="title_history">Daily Sales</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_home">Check In</string>
+    <string name="title_sync">Sync</string>
+    <string name="title_manual">Manual Search</string>
+    <string name="title_setting">Setting</string>
+    <string name="share">Scan the QR</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="unexpected_error">Unexpected Error</string>
+    <string name="NoData">No Data Found</string>
+    <string name="syncSuccess">Sync Success</string>
+    <string name="syncFailed">Sync Failed</string>
+    <string name="lastUpdatedEmpty">Last Updated : never</string>
+    <string name="success">Check In Successful</string>
+    <string name="checkOut">Check Out Successful</string>
+    <string name="notDataToSync">All Data Synced</string>
+    <string name="confirmationPrint">Do you want to reprint this token ?</string>
+    <string name="notoken">Can not find token</string>
+    <string name="InvalidUserId">Wrong Contact and Password</string>
+    <string name="SyncingData">Syncing Data Do Not Turn Off Your Device</string>
+    <string name="SyncRateText">Please Sync Rates First</string>
+</resources>

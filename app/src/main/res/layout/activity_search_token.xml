@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.SearchToken">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:id="@+id/searchHeader">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter Vechile Number"
+            android:id="@+id/editTextSearch"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_weight="3"
+            android:text="Search"
+            android:fontFamily="@font/montserratregular"
+            android:id="@+id/buttonSearch"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/linearlatou"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/searchHeader"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ticket_textviewcardParkingData"
+            android:layout_marginTop="2dp"
+            android:textSize="18sp"
+            android:freezesText="true"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:singleLine="false"
+            android:focusable="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="Ticket"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:layout_marginEnd="20dp" />
+
+        <TextView
+            android:id="@+id/vechileNumber_textviewcardParkingData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:text="Vehicle No"
+            android:ellipsize="marquee"
+            android:maxLength="20"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+
+
+        <TextView
+            android:id="@+id/amount_textviewcardParkingData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:visibility="gone"
+            android:maxLength="20"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/date_textviewcardParkingData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:maxLength="20"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:elevation="20dp"
+        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="50dp"
+        android:background="@color/white"
+        android:id="@+id/errorrelativelayout"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageviewerrors"
+            android:layout_width="500dp"
+            android:layout_height="250dp" />
+
+        <TextView
+            android:id="@+id/textviewerror"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageviewerrors"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/montserratbold"
+            android:text="No Something"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonerror"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_below="@+id/textviewerror"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/button_signup"
+            android:text="Try Again"
+            android:textSize="18sp" />
+
+
+    </RelativeLayout>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleViewSearchData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linearlatou"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp" />
+
+</RelativeLayout>

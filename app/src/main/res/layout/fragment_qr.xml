@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.QrFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/scanmessage"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/imageqr"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/qrbig"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageqr"
+            android:id="@+id/scanBtn"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/share"
+            android:textAlignment="center"
+            android:textColor="@color/blackdark"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/scanmessage"
+        android:layout_height="wrap_content">
+
+        <SurfaceView
+            android:id="@+id/surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/roi_box"
+            android:layout_gravity="center"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Focus The QR Code"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:id="@+id/textviewresult"/>
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

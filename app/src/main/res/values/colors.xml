@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">#3fbbc0</color>
+    <color name="colorPrimaryDark2">#3fbbc0</color>
+    <color name="colorPrimary">#3fbbc0</color>
+    <color name="colorPrimary2">#3fbbc0</color>
+    <!--    <color name="colorAccent">#3fbbc0</color>-->
+    <color name="colorAccent">#3fbbc0</color>
+    <color name="colorright">#c8e2fd</color>
+    <color name="colorAccept">#3D7C04</color>
+    <color name="colorReject">#F50E0E</color>
+    <color name="wavecolor">#3fbbc0</color>
+    <color name="wavecolor2">#5DE9EF</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="blackdark">#303030</color>
+    <color name="websiteprimary">#3fbbc0</color>
+    <color name="websitedark">#67e5ff</color>
+    <color name="foralert">#e6f5fa</color>
+    <color name="titlecolordate">#E7E8EC</color>
+    <color name="grey">#dedede</color>
+    <color name="greydark">#B2A5A4A4</color>
+    <color name="translucent_grey">#88272727</color>
+    <color name="faded_grey">#CEDDD9D9</color>
+    <color name="bottomnavite">#A9545455</color>
+    <color name="offblack">#DDDCDC</color>
+
+    <color name="col1">#bdf0f4</color>
+
+    <color name="lightcolor">#f1fcf6</color>
+    <color name="bordercolor">#00d68f</color>
+
+    <color name="redcolor">#ff3d71</color>
+    <color name="lightred">#fff0f4</color>
+
+    <color name="col2">#787DB5</color>
+    <color name="col3">#E6757B</color>
+    <color name="col4">#E1E09F</color>
+
+</resources>
+    <!--    bdf0f4-->

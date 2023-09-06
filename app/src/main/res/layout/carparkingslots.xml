@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewSlots"
+    android:layout_width="100dp"
+    android:layout_height="80dp"
+    android:layout_margin="10dp"
+    android:layout_marginStart="25dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="2dp"
+    android:elevation="10dp"
+    android:padding="5dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="10dp">
+
+
+    <RelativeLayout
+        android:id="@+id/relativecolorchange"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/button_accept">
+
+
+        <TextView
+            android:id="@+id/textviewslotname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Ground Floor"
+            android:textAlignment="center"
+            android:textColor="@color/blackdark"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
