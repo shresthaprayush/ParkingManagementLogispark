@@ -1,6 +1,5 @@
 package com.logispark.parkingmanagementlogispark.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -8,20 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.logispark.parkingmanagementlogispark.R;
 import com.logispark.parkingmanagementlogispark.fragment.VechileCheckIn;
-import com.logispark.parkingmanagementlogispark.main.MainActivity;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -29,6 +23,8 @@ public class CheckInRatesAdapter extends RecyclerView.Adapter<CheckInRatesAdapte
     private Context context;
     private List<ModelVehicleRate> modelVehicleRateList;
     private Fragment parent;
+    private int selectedPosition = -1;
+
 
     public CheckInRatesAdapter(Context context, List<ModelVehicleRate> modelVehicleRateList, Fragment parent) {
         this.context = context;
@@ -40,7 +36,7 @@ public class CheckInRatesAdapter extends RecyclerView.Adapter<CheckInRatesAdapte
     @Override
     public CheckInRateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.card_rates_checkin,parent,false);
+        View view = layoutInflater.inflate(R.layout.card_rates_checkin, parent, false);
         return new CheckInRateViewHolder(view);
     }
 
@@ -48,29 +44,34 @@ public class CheckInRatesAdapter extends RecyclerView.Adapter<CheckInRatesAdapte
     public void onBindViewHolder(@NonNull CheckInRateViewHolder holder, int position) {
 
         String rateName = modelVehicleRateList.get(position).getVehicleType();
-        int rate = modelVehicleRateList.get(position).getRate();
-
-        int discount = modelVehicleRateList.get(position).getDiscount();
 
         holder.textViewRateListChekIn.setText(rateName);
+
+        if (selectedPosition == position) {
+            holder.cardViewRateListCheckIn.setCardBackgroundColor(Color.parseColor("#E0E0E0"));
+        } else {
+            holder.cardViewRateListCheckIn.setCardBackgroundColor(Color.WHITE);
+        }
+
 
         holder.cardViewRateListCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                if(parent instanceof VechileCheckIn){
-
-                    ((VechileCheckIn) parent).getRate(rate,discount,rateName);
-
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition == RecyclerView.NO_POSITION) {
+                    return;
                 }
-                else{
 
-                    Log.d("Rate Passing","Error in Passing Rate");
+                if (parent instanceof VechileCheckIn) {
+                    ModelVehicleRate vehicleRate = modelVehicleRateList.get(adapterPosition);
+                    ((VechileCheckIn) parent).getRate(vehicleRate.getRate(), vehicleRate.getDiscount(), vehicleRate.getVehicleType(), vehicleRate.getIsThirtyMinActivation(), vehicleRate.getExceedingLimit(), vehicleRate.getHalfHourCost());
+                    selectedPosition = adapterPosition;
+                    notifyDataSetChanged();
+                } else {
+                    Log.d("Rate Passing", "Error in Passing Rate");
                 }
             }
         });
-
 
 
     }
@@ -80,9 +81,15 @@ public class CheckInRatesAdapter extends RecyclerView.Adapter<CheckInRatesAdapte
         return modelVehicleRateList.size();
     }
 
+    public void clearSelection() {
+        selectedPosition = -1;
+        notifyDataSetChanged();
+    }
+
     public class CheckInRateViewHolder extends RecyclerView.ViewHolder {
         CardView cardViewRateListCheckIn;
         TextView textViewRateListChekIn;
+
         public CheckInRateViewHolder(@NonNull View itemView) {
             super(itemView);
 

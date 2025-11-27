@@ -111,7 +111,7 @@ public class SharedPreferenceManager {
         editor.putString("contact", user.getContact());
         editor.putString("uniqueDeviceId", user.getUniqueDeviceId());
         editor.putString("branch", user.getBranch());
-        editor.putString("name", "Upaya");
+        editor.putString("name", "Nepvent");
         editor.putString("branchCode",user.getCode());
 
         editor.apply();

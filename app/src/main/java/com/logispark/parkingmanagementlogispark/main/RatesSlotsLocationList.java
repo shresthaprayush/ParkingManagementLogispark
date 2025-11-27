@@ -54,7 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RatesSlotsLocationList extends AppCompatActivity {
+public class  RatesSlotsLocationList extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private String branchName;
@@ -97,9 +97,9 @@ public class RatesSlotsLocationList extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.view_rate_slots_location_list);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new ServiceRateFragment(), "Service");
+//        viewPagerAdapter.addFragment(new ServiceRateFragment(), "Service");
         viewPagerAdapter.addFragment(new VehicleRateFragment(), "Rate");
-        viewPagerAdapter.addFragment(new VehicleLocationFragment(), "Locations");
+//        viewPagerAdapter.addFragment(new VehicleLocationFragment(), "Locations");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

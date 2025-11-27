@@ -22,6 +22,7 @@ import com.logispark.parkingmanagementlogispark.R;
 import com.logispark.parkingmanagementlogispark.models.ModelParkingData;
 import com.logispark.parkingmanagementlogispark.models.ModelRecentBills;
 import com.logispark.parkingmanagementlogispark.utilites.DbHandler;
+import com.logispark.parkingmanagementlogispark.utilites.TimePassedCalculator;
 
 import java.util.List;
 
@@ -52,9 +53,9 @@ public class RecentBillsAdapter extends RecyclerView.Adapter<RecentBillsAdapter.
         int id;
         String token;
         int sync;
-        String vehicleNumber, checkInTime, checkOut, vehicleType, vehicleRate, duration, discount, subTotal, accommodation, washing,total;
+        String vehicleNumber, checkInTime, checkOut, vehicleType, vehicleRate, duration, discount, subTotal, total;
 
-
+        TimePassedCalculator timePassedCalculator = new TimePassedCalculator(context);
         DbHandler dbHandler = new DbHandler(context);
         vehicleType = dbHandler.getVehicleRate(modelParkingDataList.get(position).getVechileId()).getVehicleType();
 
@@ -68,11 +69,12 @@ public class RecentBillsAdapter extends RecyclerView.Adapter<RecentBillsAdapter.
         checkInTime = "Check In : " + modelParkingDataList.get(position).getInTime();
         checkOut = "Check Out : " + modelParkingDataList.get(position).getOutTime();
         vehicleRate = String.valueOf(modelParkingDataList.get(position).getRate());
-        duration = String.valueOf(modelParkingDataList.get(position).getDuration()) + " day(s)";
+//        duration = String.valueOf(modelParkingDataList.get(position).getDuration()) + " day(s)";
+        duration = timePassedCalculator.getDuration(modelParkingDataList.get(position));
         discount = String.valueOf(modelParkingDataList.get(position).getDiscount()) + " %";
         subTotal = String.valueOf((modelParkingDataList.get(position).getRate() * modelParkingDataList.get(position).getDuration()) - (modelParkingDataList.get(position).getDiscount()));
-        accommodation = String.valueOf(modelParkingDataList.get(position).getAccommodation());
-        washing = String.valueOf(modelParkingDataList.get(position).getWashing());
+//        accommodation = String.valueOf(modelParkingDataList.get(position).getAccommodation());
+//        washing = String.valueOf(modelParkingDataList.get(position).getWashing());
         total = String.valueOf(modelParkingDataList.get(position).getAmount());
 
         holder.textViewtoken.setText(String.valueOf(token));
@@ -99,8 +101,8 @@ public class RecentBillsAdapter extends RecyclerView.Adapter<RecentBillsAdapter.
                 TextView textViewDuration = dialog.findViewById(R.id.textViewVechileDuration);
                 TextView textViewDiscount = dialog.findViewById(R.id.textViewVechileDiscount);
                 TextView textViewSubTotal = dialog.findViewById(R.id.textViewVechileSubTotal);
-                TextView textViewAccommodation = dialog.findViewById(R.id.textViewVechileAccommodation);
-                TextView textViewWashing = dialog.findViewById(R.id.textViewVechileWashing);
+//                TextView textViewAccommodation = dialog.findViewById(R.id.textViewVechileAccommodation);
+//                TextView textViewWashing = dialog.findViewById(R.id.textViewVechileWashing);
                 TextView textViewGrandTotal = dialog.findViewById(R.id.textViewVechilGrandTotal);
 
                 textViewRate.setText(vehicleRate);
@@ -112,8 +114,8 @@ public class RecentBillsAdapter extends RecyclerView.Adapter<RecentBillsAdapter.
                 textViewDuration.setText(duration);
                 textViewDiscount.setText(discount);
                 textViewSubTotal.setText(subTotal);
-                textViewAccommodation.setText(accommodation);
-                textViewWashing.setText(washing);
+//                textViewAccommodation.setText(accommodation);
+//                textViewWashing.setText(washing);
                 textViewGrandTotal.setText(total);
 
                 btnClose.setOnClickListener(new View.OnClickListener() {

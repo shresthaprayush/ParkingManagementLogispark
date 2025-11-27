@@ -113,9 +113,9 @@ public class ProfileFrag extends Fragment {
 
         profilename = view.findViewById(R.id.profile_name);
         textViewprofilenumber = view.findViewById(R.id.profile_username);
-        textViewbranch = view.findViewById(R.id.profile_slug);
-
-        txtbranchCode = view.findViewById(R.id.profile_branchCode);
+//        textViewbranch = view.findViewById(R.id.profile_slug);
+//
+//        txtbranchCode = view.findViewById(R.id.profile_branchCode);
 
 
         relativeLayoutSetting.setOnClickListener(new View.OnClickListener() {
@@ -127,14 +127,14 @@ public class ProfileFrag extends Fragment {
         });
         name = SharedPreferenceManager.getmInstance(getContext()).getUser().getName();
         contact = SharedPreferenceManager.getmInstance(getContext()).getUser().getContact();
-        branch = SharedPreferenceManager.getmInstance(getContext()).getDeviceInformation().getBranchName();
-        branchCode = SharedPreferenceManager.getmInstance(getContext()).getDeviceInformation().getBranchCode();
+//        branch = SharedPreferenceManager.getmInstance(getContext()).getDeviceInformation().getBranchName();
+//        branchCode = SharedPreferenceManager.getmInstance(getContext()).getDeviceInformation().getBranchCode();
 
 
         profilename.setText(name);
-        textViewbranch.setText(branch);
+//        textViewbranch.setText(branch);
         textViewprofilenumber.setText(contact);
-        txtbranchCode.setText(branchCode);
+//        txtbranchCode.setText(branchCode);
 
 
         return view;

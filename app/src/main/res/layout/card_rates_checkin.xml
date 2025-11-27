@@ -12,13 +12,15 @@
     android:elevation="10dp"
     android:padding="5dp"
     app:cardCornerRadius="15dp"
-    app:cardElevation="10dp">
+    app:cardElevation="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@drawable/selectable_item_background">
 
     <RelativeLayout
         android:id="@+id/relativecolorchangeRate"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/button_accept">
+        android:layout_height="match_parent">
 
 
         <TextView

@@ -52,8 +52,9 @@ public class RetrofitClient {
 
         onlineserver = SharedPreferenceManager.getmInstance(context).geturl();
 
-        String finalurl = "https://logisparktech.com/nepvent-parking/api/";
-//        String finalurl = "http://192.168.1.122:8000/api/";
+//        String finalurl = "https://logisparktech.com/nepvent-parking/api/";
+        String finalurl = "https://logisparktech.com/parking-new/api/";
+//        String finalurl = "http://192.168.1.169:8000/api/";
 
 
 

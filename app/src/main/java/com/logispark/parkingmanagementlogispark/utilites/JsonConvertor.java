@@ -44,6 +44,9 @@ public class JsonConvertor {
         jsonObject.addProperty("accommodation", modelParkingData.getAccommodation());
         jsonObject.addProperty("washing", modelParkingData.getWashing());
         jsonObject.addProperty("nationality", modelDriver.getNationality());
+        jsonObject.addProperty("isThirtyMinActivation", modelParkingData.getIs30MinActivation());
+        jsonObject.addProperty("exceedingLimit", modelParkingData.getExceedingLimit());
+        jsonObject.addProperty("halfHourCost", modelParkingData.getHalfHourCost());
 
 
         jsonArray.add(jsonObject);
@@ -55,7 +58,6 @@ public class JsonConvertor {
 
     public ModelGenerateJsonArrayOutput generateJsonArray(List<ModelParkingData> modelParkingDataList) {
 
-        JsonObject jsonObject = new JsonObject();
         JsonArray jsonArray = new JsonArray();
         ArrayList<String> id = new ArrayList<>();
 
@@ -63,6 +65,7 @@ public class JsonConvertor {
 
         for (ModelParkingData modelParkingData : modelParkingDataList) {
 
+            JsonObject jsonObject = new JsonObject();
             ModelDriver modelDriver = dbHandler.searchDriver(modelParkingData.getDriverId());
 
 
@@ -85,6 +88,9 @@ public class JsonConvertor {
             jsonObject.addProperty("accommodation", modelParkingData.getAccommodation());
             jsonObject.addProperty("washing", modelParkingData.getWashing());
             jsonObject.addProperty("nationality", modelDriver.getNationality());
+            jsonObject.addProperty("isThirtyMinActivation", modelParkingData.getIs30MinActivation());
+            jsonObject.addProperty("exceedingLimit", modelParkingData.getExceedingLimit());
+            jsonObject.addProperty("halfHourCost", modelParkingData.getHalfHourCost());
 
 
             jsonArray.add(jsonObject);

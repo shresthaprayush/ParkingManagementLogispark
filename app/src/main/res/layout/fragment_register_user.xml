@@ -110,70 +110,70 @@
                         </RelativeLayout>
 
 
-                        <RelativeLayout
-                            android:id="@+id/rrslug"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/rrusername"
-                            android:layout_marginTop="20dp">
+<!--                        <RelativeLayout-->
+<!--                            android:id="@+id/rrslug"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_below="@id/rrusername"-->
+<!--                            android:layout_marginTop="20dp">-->
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/imageviewslug"
-                                android:layout_width="45dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/parking" />
+<!--                            <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                                android:id="@+id/imageviewslug"-->
+<!--                                android:layout_width="45dp"-->
+<!--                                android:layout_height="40dp"-->
+<!--                                android:src="@drawable/parking" />-->
 
-                            <TextView
-                                android:id="@+id/profile_slug"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_toRightOf="@+id/imageviewslug"
-                                android:text=""
-                                android:textColor="@color/blackdark"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/rrbranchCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/rrslug"
-                            android:layout_marginTop="20dp">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/imageviewBranchCode"
-                                android:layout_width="45dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/parking" />
-
-                            <TextView
-                                android:id="@+id/profile_branchCode"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_toRightOf="@+id/imageviewBranchCode"
-                                android:text=""
-                                android:textColor="@color/blackdark"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/profile_slug"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:layout_marginLeft="8dp"-->
+<!--                                android:layout_marginTop="5dp"-->
+<!--                                android:layout_toRightOf="@+id/imageviewslug"-->
+<!--                                android:text=""-->
+<!--                                android:textColor="@color/blackdark"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:textStyle="bold" />-->
 
 
-                        </RelativeLayout>
+<!--                        </RelativeLayout>-->
+
+<!--                        <RelativeLayout-->
+<!--                            android:id="@+id/rrbranchCode"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_below="@id/rrslug"-->
+<!--                            android:layout_marginTop="20dp">-->
+
+<!--                            <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                                android:id="@+id/imageviewBranchCode"-->
+<!--                                android:layout_width="45dp"-->
+<!--                                android:layout_height="40dp"-->
+<!--                                android:src="@drawable/parking" />-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/profile_branchCode"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:layout_marginLeft="8dp"-->
+<!--                                android:layout_marginTop="5dp"-->
+<!--                                android:layout_toRightOf="@+id/imageviewBranchCode"-->
+<!--                                android:text=""-->
+<!--                                android:textColor="@color/blackdark"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:textStyle="bold" />-->
+
+
+<!--                        </RelativeLayout>-->
 
 
                         <RelativeLayout
                             android:id="@+id/rrSetting"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/rrbranchCode"
+                            android:layout_below="@id/rrusername"
                             android:layout_marginTop="20dp">
 
                             <de.hdodenhof.circleimageview.CircleImageView

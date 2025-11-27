@@ -2,7 +2,6 @@ package com.logispark.parkingmanagementlogispark.main;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,24 +17,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonArray;
-import com.imin.scan.CameraScan;
 import com.imin.scan.CaptureActivity;
 import com.imin.scan.DecodeConfig;
 import com.imin.scan.DecodeFormatManager;
 import com.imin.scan.Result;
 import com.imin.scan.analyze.MultiFormatAnalyzer;
 import com.imin.scan.config.ResolutionCameraConfig;
-import com.logispark.parkingmanagementlogispark.Adapters.ViewPagerAdapter;
 import com.logispark.parkingmanagementlogispark.IminPrinter.IminPrinterHelper;
 import com.logispark.parkingmanagementlogispark.R;
-import com.logispark.parkingmanagementlogispark.fragment.VehicleLocationFragment;
-import com.logispark.parkingmanagementlogispark.fragment.VehicleRateFragment;
+import com.logispark.parkingmanagementlogispark.Sumni.SunmiPrintHelper;
 import com.logispark.parkingmanagementlogispark.models.ModelActivateTable;
 import com.logispark.parkingmanagementlogispark.models.ModelDeviceSpecificInformation;
 import com.logispark.parkingmanagementlogispark.models.ModelDriver;
@@ -50,7 +44,9 @@ import com.logispark.parkingmanagementlogispark.utilites.RetrofitClient;
 import com.logispark.parkingmanagementlogispark.utilites.SharedPreferenceManager;
 import com.logispark.parkingmanagementlogispark.utilites.Sync.NetworkStateChecker;
 import com.logispark.parkingmanagementlogispark.utilites.TimePassedCalculator;
+import com.logispark.parkingmanagementlogispark.utilites.TimeUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -67,7 +63,6 @@ public class QrActivity extends CaptureActivity {
     TextView tresult, tvscanButton;
     ProgressDialog progressDialog;
     private IminPrinterHelper iminPrinterHelper;
-    //    private CodeScanner mCodeScanner;
     BarcodeDetector barcodeDetector;
     private ModelDeviceSpecificInformation modelDeviceSpecificInformation;
     private ProgressDialog dialog;
@@ -96,7 +91,7 @@ public class QrActivity extends CaptureActivity {
         dbHandler = new DbHandler(getApplicationContext());
 
 
-//        init();
+        init();
 
         modelDeviceSpecificInformation = SharedPreferenceManager.getmInstance(getApplicationContext()).getDeviceInformation();
 
@@ -116,17 +111,16 @@ public class QrActivity extends CaptureActivity {
 
         getCameraScan().setPlayBeep(true)
                 .setPlayRaw(R.raw.beep)
-                .setVibrate(true)//设置是否震动，默认为false
-//                    .setCameraConfig(new CameraConfig())//设置相机配置信息，CameraConfig可覆写options方法自定义配置
-                .setCameraConfig(new ResolutionCameraConfig(QrActivity.this))//设置CameraConfig，可以根据自己的需求去自定义配置
-                .setNeedAutoZoom(false)//二维码太小时可自动缩放，默认为false
-                .setNeedTouchZoom(false)//支持多指触摸捏合缩放，默认为true
-                .setDarkLightLux(45f)//设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
-                .setBrightLightLux(100f)//设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
-                .bindFlashlightView(null)//绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
-                .setOnScanResultCallback(this)//设置扫码结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
-                .setAnalyzer(new MultiFormatAnalyzer(decodeConfig))//设置分析器,DecodeConfig可以配置一些解码时的配置信息，如果内置的不满足您的需求，你也可以自定义实现，
-                .setAnalyzeImage(true);//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫码识别功能
+                .setVibrate(true)
+                .setCameraConfig(new ResolutionCameraConfig(QrActivity.this))
+                .setNeedAutoZoom(false)
+                .setNeedTouchZoom(false)
+                .setDarkLightLux(45f)
+                .setBrightLightLux(100f)
+                .bindFlashlightView(null)
+                .setOnScanResultCallback(this)
+                .setAnalyzer(new MultiFormatAnalyzer(decodeConfig))
+                .setAnalyzeImage(true);
 
     }
 
@@ -148,25 +142,24 @@ public class QrActivity extends CaptureActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sendData(String result) {
 
-        iminPrinterHelper = new IminPrinterHelper(getApplicationContext());
-        boolean printerSuccess = iminPrinterHelper.initPrinter();
+//        iminPrinterHelper = new IminPrinterHelper(getApplicationContext());
+//        boolean printerSuccess = iminPrinterHelper.initPrinter();
 
         modelParkingData = dbHandler.searchParkingDataFromToken(result);
         if (modelParkingData.id == -1) {
             Toast.makeText(getApplicationContext(), "Parking Data Not Found", Toast.LENGTH_SHORT).show();
-//            Toast.("Parking Data Not Found", R.drawable.error);
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK & Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else {
-            int days = -1;
+            int hours = -1;
             TimePassedCalculator timePassedCalculator = new TimePassedCalculator(getApplicationContext());
-            days = timePassedCalculator.getDaysPassed(modelParkingData);
-            if (days == -1) {
+            hours = timePassedCalculator.getHoursPassed(modelParkingData);
+            if (hours == -1) {
                 Toast.makeText(getApplicationContext(), "Error in calculation of time", Toast.LENGTH_SHORT).show();
-            } else if (days == 0) {
+            } else if (hours == 0) {
 
-                days = 1;
+                hours = 1;
 
             }
 
@@ -174,14 +167,14 @@ public class QrActivity extends CaptureActivity {
             int accommodation = modelParkingData.getAccommodation();
             int washing = modelParkingData.getWashing();
             String ticketCode = modelParkingData.getTicketCode();
-            float subtotal = (cost * days);
+            float subtotal = (cost * hours);
             float discountAmount = subtotal * ((float) modelParkingData.getDiscount() / 100);
             subtotal = subtotal - discountAmount;
             float total = subtotal + washing + accommodation;
-            if (printReceipt(modelParkingData, days, cost, total, subtotal, discountAmount, ticketCode)) {
+            if (printReceipt(modelParkingData, hours, cost, total, subtotal, discountAmount, ticketCode)) {
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK & Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
 
@@ -189,29 +182,33 @@ public class QrActivity extends CaptureActivity {
 
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     private boolean printReceipt(ModelParkingData modelParkingData, int timePassed, int cost, float total, float subtotal, float discountAmount, String ticketCode) {
 
         ModelVehicleRate modelVehicle = dbHandler.searchByVechileId(modelParkingData.getVechileId());
-
+        TimePassedCalculator timePassedCalculator = new TimePassedCalculator(getApplicationContext());
 
         String vecihleType = "Type : " + modelVehicle.getVehicleType();
-        String rate = "Rate : " + String.valueOf(modelParkingData.getRate()) + " /day";
+        String rate = "Rate : " + String.valueOf(modelParkingData.getRate()) + " /hour";
         String accommodation = "Accommodation : Nrs. " + String.valueOf(modelParkingData.getAccommodation());
         String washing = "Washing : Nrs. " + String.valueOf(modelParkingData.getWashing());
-        String todaysDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
+        String todaysDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(new Date());
         String vehicleNumber = "Vehicle Number : " + String.valueOf(modelParkingData.getVehicleNumber());
-        String duration = "Duration : " + Math.ceil(timePassed) + " Days";
-        String totalCost = "Total Cost : Nrs. " + String.valueOf(total);
+        String duration = "Duration : " + timePassedCalculator.getDuration(modelParkingData);
+        String totalCost = "Total Cost : Nrs. " + timePassedCalculator.getTotalCost(modelParkingData);
         String subTotal = "Sub Total : Nrs. " + String.valueOf(subtotal);
-        String checkInTime = "Check In : " + modelParkingData.getInTime();
+        String checkInTime = "Check In : " + TimeUtils.formatTime(modelParkingData.getInTime().substring(11));
+        String checkOutTime = "Check Out : " + TimeUtils.formatTime(new Date().toString().substring(11));
+
         String discount = "Discount : Nrs. " + String.valueOf(discountAmount);
         String ticketNo = "Ticket No. :" + String.valueOf(ticketCode);
         String printerIp = "192.168.1.101";
 
         int slotId = modelParkingData.getSlot();
 
-        ModelEstimate modelEstimate = new ModelEstimate(todaysDate, String.valueOf(rate), totalCost, duration, checkInTime, discount, vecihleType, vehicleNumber, washing, accommodation, subTotal, ticketNo);
+        ModelEstimate modelEstimate = new ModelEstimate(todaysDate, String.valueOf(rate), totalCost, duration, checkInTime,checkOutTime,  discount, vecihleType, vehicleNumber, washing, accommodation, subTotal, ticketNo);
         modelParkingData.setActive(0);
         modelParkingData.setOutTime(todaysDate);
         modelParkingData.setDuration(timePassed);
@@ -222,8 +219,7 @@ public class QrActivity extends CaptureActivity {
         ModelDriver modelDriver = dbHandler.searchDriver(driverId);
         dialog = ProgressDialog.show(QrActivity.this, "Connecting", "please wait...");
 
-//            boolean printResult = SunmiPrintHelper.getInstance().printEstimate(getContext(),modelEstimate);
-        boolean printResult = iminPrinterHelper.printEstimate(modelEstimate,0);
+        boolean printResult = SunmiPrintHelper.getInstance().printEstimate(getApplicationContext(),modelEstimate);
 
         if (printResult) {
 
@@ -267,8 +263,6 @@ public class QrActivity extends CaptureActivity {
                         @Override
                         public void onFailure(Call<ModelSucessSaveData> call, Throwable t) {
 
-//                            showtoast(getString(R.string.no_internet) + "Sending Data", R.drawable.nointernet);
-
 
                         }
                     });
@@ -302,7 +296,6 @@ public class QrActivity extends CaptureActivity {
 
                         dbHandler.updateSyncOnParkingData(modelParkingData.getId());
                         Log.d("Deac", "Activated");
-//                            progressBar.setVisibility(View.GONE);
                         dialog.dismiss();
                     }
                 } else {
@@ -322,21 +315,12 @@ public class QrActivity extends CaptureActivity {
         });
     }
 
-//    private void init() {
-//        SunmiPrintHelper.getInstance().initSunmiPrinterService(getContext());
-//        SunmiPrintHelper.getInstance().controlLcd(1);
-//        SunmiPrintHelper.getInstance().controlLcd(2);
-//        SunmiPrintHelper.getInstance().controlLcd(4);
-//
-//    }
+    private void init() {
+        SunmiPrintHelper.getInstance().initSunmiPrinterService(getApplicationContext());
+
+    }
 
 
-    /**
-     * Custom Toast Generator
-     *
-     * @param text
-     * @param image
-     */
     private void showtoast(String text, int image) {
 
         LayoutInflater layoutInflater = getLayoutInflater();
@@ -366,9 +350,6 @@ public class QrActivity extends CaptureActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
 

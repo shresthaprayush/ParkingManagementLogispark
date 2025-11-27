@@ -3,16 +3,11 @@ package com.logispark.parkingmanagementlogispark.utilites;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.logispark.parkingmanagementlogispark.models.ModelDriver;
 import com.logispark.parkingmanagementlogispark.models.ModelLocations;
@@ -21,15 +16,10 @@ import com.logispark.parkingmanagementlogispark.models.ModelPrintTable;
 import com.logispark.parkingmanagementlogispark.models.ModelSalesStats;
 import com.logispark.parkingmanagementlogispark.models.ModelService;
 import com.logispark.parkingmanagementlogispark.models.ModelSlots;
-import com.logispark.parkingmanagementlogispark.models.ModelUser;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicle;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,12 +68,15 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ACCOMMODATION = "accommodation";
     private static final String COLUMN_WASHING = "washing";
     private static final String COLUMN_NATIONALITY = "nationality";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 3;
     public static final String DB_NAME = "parkingDB";
     private static final String COLUMN_DRIVERID = "driverID";
     private static final String COLUMN_PARKINGTABLEID = "parkingID";
     private static final String COLUMN_INVOICECOUNT = "invoiceCount";
     private static final String COLUMN_SLIPCOUNT = "slipCount";
+    private static final String COLUMN_THIRTY_MIN_ACTIVATION = "isThirtyMinActivation";
+    private static final String COLUMN_EXCEEDING_LIMIT = "exceedingLimit";
+    private static final String COLUMN_HALF_HOUR_COST = "halfHourCost";
 
 
     public DbHandler(@Nullable Context context) {
@@ -106,7 +99,10 @@ public class DbHandler extends SQLiteOpenHelper {
                 + COLUMN_VECHILETYPE + " TEXT, "
                 + COLUMN_DISCOUNT + " INTEGER, "
                 + COLUMN_SERVERID + " INTEGER, "
-                + COLUMN_SYNC + " INTEGER )";
+                + COLUMN_SYNC + " INTEGER, "
+                + COLUMN_THIRTY_MIN_ACTIVATION + " INTEGER, "
+                + COLUMN_EXCEEDING_LIMIT + " INTEGER, "
+                + COLUMN_HALF_HOUR_COST + " INTEGER )";
 
         //Create parking Count Table
 
@@ -131,22 +127,33 @@ public class DbHandler extends SQLiteOpenHelper {
         String createParkingTableQuery = "CREATE TABLE " + PARKING_TABLE + "( " + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_TICKETCODE + " TEXT, " + COLUMN_VECHILEID + " INTEGER , " + COLUMN_INTIME + " DATE, " + COLUMN_OUTTIME + "  DATE, " + COLUMN_CREATEDAT + "  DATE, " + COLUMN_TOKENNO + "  INTEGER, " + COLUMN_DRIVERID + "  INTEGER, "
                 + COLUMN_ACTIVE + " INTEGER, " + COLUMN_RATE + " INTEGER, " + COLUMN_DISCOUNT + " INTEGER, " + COLUMN_AMOUNT + " INTEGER, " + COLUMN_TOTALDURATION + " INTEGER, " + COLUMN_SYNC + " INTEGER, "
-                + COLUMN_SLOTID + " INTEGER, " + COLUMN_VECHILENO + " INTEGER," + COLUMN_SLOT + " TEXT, " + COLUMN_ACCOMMODATION + " INTEGER," + COLUMN_WASHING + " INTEGER, FOREIGN KEY(" + COLUMN_VECHILEID + ") REFERENCES " + VEHICLE_RATE_TABLE + "(" + COLUMN_ID + " ), FOREIGN KEY("
+                + COLUMN_SLOTID + " INTEGER, " + COLUMN_VECHILENO + " INTEGER," + COLUMN_SLOT + " TEXT, " + COLUMN_ACCOMMODATION + " INTEGER,"
+                + COLUMN_WASHING + " INTEGER, " + COLUMN_THIRTY_MIN_ACTIVATION + " INTEGER, " + COLUMN_EXCEEDING_LIMIT + " INTEGER, " + COLUMN_HALF_HOUR_COST + " INTEGER, FOREIGN KEY("
+                + COLUMN_VECHILEID + ") REFERENCES " + VEHICLE_RATE_TABLE + "(" + COLUMN_ID + " ), FOREIGN KEY("
                 + COLUMN_DRIVERID + ") REFERENCES " + DRIVER_TABLE + "(" + COLUMN_ID + "))";
 
         db.execSQL(createUserTableQuery);
         db.execSQL(createAreaTableQuery);
         db.execSQL(createSlotTable);
-        db.execSQL(createPrintTable);
         db.execSQL(createVehicleRateQuery);
-        db.execSQL(createParkingTableQuery);
-        db.execSQL(createServiceTable);
         db.execSQL(createDriverQuery);
+        db.execSQL(createServiceTable);
+        db.execSQL(createParkingTableQuery);
+        db.execSQL(createPrintTable);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + PARKING_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + AREA_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SLOT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + PRINT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + VEHICLE_RATE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SERVICE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DRIVER_TABLE);
+        onCreate(db);
     }
 
 
@@ -301,16 +308,18 @@ public class DbHandler extends SQLiteOpenHelper {
             int discount = c.getInt(3);
             String serverId = c.getString(4);
             int syncStatus = c.getInt(5);
+            int isThirtyMinActivation = c.getInt(6);
+            int exceedingLimit = c.getInt(7);
+            int halfHourCost = c.getInt(8);
 
 
-            ModelVehicleRate modelVehicle = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type);
+            ModelVehicleRate modelVehicle = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type, isThirtyMinActivation, exceedingLimit, halfHourCost);
             return modelVehicle;
 
 
         } else {
-            return new ModelVehicleRate(-1, 0, 0, "", 0, "");
+            return new ModelVehicleRate(-1, 0, 0, "", 0, "", 0, 0, 0);
         }
-
 
     }
 
@@ -327,14 +336,17 @@ public class DbHandler extends SQLiteOpenHelper {
             int discount = c.getInt(3);
             String serverId = c.getString(4);
             int syncStatus = c.getInt(5);
+            int isThirtyMinActivation = c.getInt(6);
+            int exceedingLimit = c.getInt(7);
+            int halfHourCost = c.getInt(8);
 
 
-            ModelVehicleRate modelVehicle = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type);
+            ModelVehicleRate modelVehicle = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type, isThirtyMinActivation, exceedingLimit, halfHourCost);
             return modelVehicle;
 
 
         } else {
-            return new ModelVehicleRate(-1, 0, 0, "", 0, "");
+            return new ModelVehicleRate(-1, 0, 0, "", 0, "", 0, 0, 0);
         }
 
 
@@ -353,16 +365,18 @@ public class DbHandler extends SQLiteOpenHelper {
             int discount = c.getInt(3);
             String serverId = c.getString(4);
             int syncStatus = c.getInt(5);
+            int isThirtyMinActivation = c.getInt(6);
+            int exceedingLimit = c.getInt(7);
+            int halfHourCost = c.getInt(8);
 
 
-            ModelVehicleRate modelVehicle = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type);
+            ModelVehicleRate modelVehicle = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type, isThirtyMinActivation, exceedingLimit, halfHourCost);
             return modelVehicle;
 
 
         } else {
-            return new ModelVehicleRate(-1, 0, 0, "", 0, "");
+            return new ModelVehicleRate(-1, 0, 0, "", 0, "", 0, 0, 0);
         }
-
 
     }
 
@@ -391,6 +405,9 @@ public class DbHandler extends SQLiteOpenHelper {
         cv.put(COLUMN_DRIVERID, modelParkingData.driverId);
         cv.put(COLUMN_ACCOMMODATION, modelParkingData.accommodation);
         cv.put(COLUMN_WASHING, modelParkingData.washing);
+        cv.put(COLUMN_THIRTY_MIN_ACTIVATION, modelParkingData.getIs30MinActivation());
+        cv.put(COLUMN_EXCEEDING_LIMIT, modelParkingData.getExceedingLimit());
+        cv.put(COLUMN_HALF_HOUR_COST, modelParkingData.getHalfHourCost());
 
         return db.insert(PARKING_TABLE, null, cv);
 
@@ -423,13 +440,16 @@ public class DbHandler extends SQLiteOpenHelper {
             String slot = c.getString(16);
             int accommodation = c.getInt(17);
             int washing = c.getInt(18);
+            int is30MinActivation = c.getInt(19);
+            int exceedingLimit = c.getInt(20);
+            int halfHourCost = c.getInt(21);
 
-            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId);
+            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId, is30MinActivation, exceedingLimit, halfHourCost);
             return modelParkingData;
 
 
         } else {
-            return new ModelParkingData(-1, 0, -1, -1, 0, 0, 0, 0, 0, 0, "", "", "", "", "", "", 0.00, -1, -1);
+            return new ModelParkingData(-1, 0, -1, -1, 0, 0, 0, 0, 0, 0, "", "", "", "", "", "", 0.00, -1, -1, 0, 0, 0);
         }
 
 
@@ -463,9 +483,12 @@ public class DbHandler extends SQLiteOpenHelper {
             String slot = c.getString(16);
             int accommodation = c.getInt(17);
             int washing = c.getInt(18);
+            int is30MinActivation = c.getInt(19);
+            int exceedingLimit = c.getInt(20);
+            int halfHourCost = c.getInt(21);
 
 
-            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId);
+            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId, is30MinActivation, exceedingLimit, halfHourCost);
             modelParkingDataList.add(modelParkingData);
 
         }
@@ -549,9 +572,12 @@ public class DbHandler extends SQLiteOpenHelper {
             String slot = c.getString(16);
             int accommodation = c.getInt(17);
             int washing = c.getInt(18);
+            int is30MinActivation = c.getInt(19);
+            int exceedingLimit = c.getInt(20);
+            int halfHourCost = c.getInt(21);
 
 
-            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId);
+            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId, is30MinActivation, exceedingLimit, halfHourCost);
             modelParkingDataList.add(modelParkingData);
 
         }
@@ -602,8 +628,11 @@ public class DbHandler extends SQLiteOpenHelper {
             String slot = c.getString(16);
             int accommodation = c.getInt(17);
             int washing = c.getInt(18);
+            int is30MinActivation = c.getInt(19);
+            int exceedingLimit = c.getInt(20);
+            int halfHourCost = c.getInt(21);
 
-            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId);
+            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId, is30MinActivation, exceedingLimit, halfHourCost);
             modelParkingDataList.add(modelParkingData);
         }
 
@@ -748,10 +777,13 @@ public class DbHandler extends SQLiteOpenHelper {
         cv.put(COLUMN_DISCOUNT, modelVehicleRate.getDiscount());
         cv.put(COLUMN_SERVERID, modelVehicleRate.getId());
         cv.put(COLUMN_SYNC, 1);
+        cv.put(COLUMN_THIRTY_MIN_ACTIVATION, modelVehicleRate.getIsThirtyMinActivation());
+        cv.put(COLUMN_EXCEEDING_LIMIT, modelVehicleRate.getExceedingLimit());
+        cv.put(COLUMN_HALF_HOUR_COST, modelVehicleRate.getHalfHourCost());
 
         long insert = db.insert(VEHICLE_RATE_TABLE, null, cv);
 
-        return insert == -1;
+        return insert != -1;
     }
 
     /**
@@ -815,11 +847,14 @@ public class DbHandler extends SQLiteOpenHelper {
                 int rate = cursor.getInt(1);
                 String type = cursor.getString(2);
                 int discount = cursor.getInt(3);
-                String serverId = cursor.getString(4);
+                int serverId = cursor.getInt(4);
                 int syncStatus = cursor.getInt(5);
+                int isThirtyMinActivation = cursor.getInt(6);
+                int exceedingLimit = cursor.getInt(7);
+                int halfHourCost = cursor.getInt(8);
 
 
-                ModelVehicleRate modelVehicleRate = new ModelVehicleRate(id, rate, discount, serverId, syncStatus, type);
+                ModelVehicleRate modelVehicleRate = new ModelVehicleRate(id, rate, discount, String.valueOf(serverId), syncStatus, type, isThirtyMinActivation, exceedingLimit, halfHourCost);
                 modelVehicleRateList.add(modelVehicleRate);
             }
             while (cursor.moveToNext());
@@ -1018,13 +1053,16 @@ public class DbHandler extends SQLiteOpenHelper {
             int discount = c.getInt(3);
             int serverId = c.getInt(4);
             int syncStatus = c.getInt(5);
+            int isThirtyMinActivation = c.getInt(6);
+            int exceedingLimit = c.getInt(7);
+            int halfHourCost = c.getInt(8);
 
-            ModelVehicleRate modelVehicleRate = new ModelVehicleRate(id, rate, discount, String.valueOf(serverId), syncStatus, type);
+            ModelVehicleRate modelVehicleRate = new ModelVehicleRate(id, rate, discount, String.valueOf(serverId), syncStatus, type, isThirtyMinActivation, exceedingLimit, halfHourCost);
             return modelVehicleRate;
 
 
         } else {
-            return new ModelVehicleRate(-1, 0, 0, "", 0, "");
+            return new ModelVehicleRate(-1, 0, 0, "", 0, "", 0, 0, 0);
         }
 
 

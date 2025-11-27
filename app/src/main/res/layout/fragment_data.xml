@@ -8,15 +8,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_above="@+id/buttonSendData"
+        android:layout_above="@+id/bottom_buttons"
         android:layout_height="match_parent">
 
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:elevation="10dp"
-            cardCornerRadius="10dp"
-            cardElevation="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
             android:id="@+id/cardsalesdata"
             android:layout_margin="5dp"
             android:layout_height="wrap_content">
@@ -219,16 +219,32 @@
     </RelativeLayout>
 
 
-    <Button
-        android:id="@+id/buttonSendData"
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Send Data"
-        android:textSize="18sp" />
+        android:layout_margin="5dp"
+        >
 
+        <Button
+            android:id="@+id/buttonSendData"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:text="Send Data"
+            android:layout_marginEnd="10dp"
+            android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/buttonPrint"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="Print"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </RelativeLayout>

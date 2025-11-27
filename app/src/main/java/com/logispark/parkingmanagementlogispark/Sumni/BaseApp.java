@@ -21,6 +21,6 @@ public class BaseApp extends Application {
 //        IminPrinterHelper iminPrinterHelper = new IminPrinterHelper(getApplicationContext());
 //        iminPrinterHelper.initPrinter();
 
-//        SunmiPrintHelper.getInstance().initSunmiPrinterService(this);
+        SunmiPrintHelper.getInstance().initSunmiPrinterService(this);
     }
 }

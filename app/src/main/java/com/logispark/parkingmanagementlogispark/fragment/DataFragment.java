@@ -10,12 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,12 +20,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.logispark.parkingmanagementlogispark.Adapters.RecentBillsAdapter;
 import com.logispark.parkingmanagementlogispark.R;
-//import com.logispark.parkingmanagementlogispark.main.Itemsold;
+import com.logispark.parkingmanagementlogispark.Sumni.SunmiPrintHelper;
 import com.logispark.parkingmanagementlogispark.models.ModelParkingData;
-import com.logispark.parkingmanagementlogispark.models.ModelRecentBills;
 import com.logispark.parkingmanagementlogispark.models.ModelSalesStats;
+import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
+import com.logispark.parkingmanagementlogispark.models.SaleReportModel;
 import com.logispark.parkingmanagementlogispark.utilites.CsvWriter;
 import com.logispark.parkingmanagementlogispark.utilites.DbHandler;
 
@@ -39,10 +39,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class DataFragment extends Fragment {
@@ -51,7 +52,7 @@ public class DataFragment extends Fragment {
     private String currentdate, filename;
     Dialog dialog;
     private DbHandler dbHandler;
-    private Button btnyes, btnno, btnSendData;
+    private Button btnyes, btnno, btnSendData, btnPrint;
     private RelativeLayout relativeLayoutbills, relativLayoutTotalsales, relativeLayouttotalitems, nodatamainrv;
     private int count, itemsold, totalitemssold;
     private RecyclerView recyclerViewrecentbills;
@@ -74,6 +75,7 @@ public class DataFragment extends Fragment {
         relativLayoutTotalsales = view.findViewById(R.id.reelativelayouttotalsales);
         relativeLayoutbills = view.findViewById(R.id.reelativelayouttotalbills);
         btnSendData = view.findViewById(R.id.buttonSendData);
+        btnPrint = view.findViewById(R.id.buttonPrint);
 
         dbHandler = new DbHandler(getContext());
 
@@ -98,6 +100,42 @@ public class DataFragment extends Fragment {
         });
 
         modelParkingDataList = dbHandler.getTodaysAllSalesData();
+        ModelSalesStats modelSalesStats = dbHandler.getSalesData();
+
+        btnPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Map<String, double[]> vehicleSales = new HashMap<>();
+                List<ModelVehicleRate> vehicleRates = dbHandler.getAllVehicleRate();
+
+                for (ModelVehicleRate rate : vehicleRates) {
+                    vehicleSales.put(rate.getVehicleType(), new double[2]); // Index 0 for count, 1 for total cost
+                }
+
+                for (ModelParkingData parkingData : modelParkingDataList) {
+                    ModelVehicleRate vehicleRate = dbHandler.searchByVechileId(parkingData.getVechileId());
+                    String vehicleType = vehicleRate.getVehicleType();
+                    double amount = parkingData.getAmount();
+
+                    if (vehicleSales.containsKey(vehicleType)) {
+                        double[] sales = vehicleSales.get(vehicleType);
+                        assert sales != null;
+                        sales[0]++; // Increment count
+                        sales[1] += amount; // Add to total cost
+                    }
+                }
+
+                String date = "Date:" + currentdate;
+                String totalSale = String.valueOf(modelSalesStats.getTotalAmount());
+                String totalBillIssued = String.valueOf(modelSalesStats.getTokens());
+
+                SaleReportModel saleReportModel = new SaleReportModel(date, totalSale, totalBillIssued, vehicleSales);
+                SunmiPrintHelper.getInstance().printSaleEstimate(saleReportModel);
+            }
+        });
+
 //            relativeLayoutbills.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -106,7 +144,6 @@ public class DataFragment extends Fragment {
 //                }
 //            });
 
-        ModelSalesStats modelSalesStats = dbHandler.getSalesData();
 
         todaysalesamounttv.setText(String.valueOf(modelSalesStats.getTotalAmount()));
         todaysbillissuedtv.setText(String.valueOf(modelSalesStats.getTokens()));
@@ -117,7 +154,7 @@ public class DataFragment extends Fragment {
         if (modelParkingDataList.size() != 0) {
 
             recyclerViewrecentbills.setLayoutManager(new LinearLayoutManager(getContext()));
-            recentBillsAdapter = new RecentBillsAdapter(getContext(), modelParkingDataList,getActivity());
+            recentBillsAdapter = new RecentBillsAdapter(getContext(), modelParkingDataList, getActivity());
             recyclerViewrecentbills.setAdapter(recentBillsAdapter);
         } else {
 
@@ -202,32 +239,29 @@ public class DataFragment extends Fragment {
     }
 
     private void ShareGif2() {
-        
-        try{
+
+        try {
             String[] addresses = {"prayushshrestha89@gmail.com", "pshrestha.logispark@gmail.com"};
-            String text = "Hi, \n\n Here is the sales data for today! \n\n Regards, \n\n Upaya Parking App";
+            String text = "Hi, \n\n Here is the sales data for today! \n\n Regards, \n\n Nepvent Parking App";
             Context context = getContext();
-            File exportDir = new File(Environment.getExternalStorageDirectory(), "/upaya/");
+            File exportDir = new File(Environment.getExternalStorageDirectory(), "/Nepvent/");
             String fileName = filename;
             File filelocation = new File(exportDir, fileName);
             Uri uri = Uri.fromFile(filelocation);
             Intent fileintent = new Intent(Intent.ACTION_SEND);
             fileintent.setType("text/csv");
-            String subject = "Upaya | Sales Data " + currentdate;
+            String subject = "Nepvent | Sales Data " + currentdate;
             fileintent.putExtra(Intent.EXTRA_SUBJECT, subject);
             fileintent.putExtra(Intent.EXTRA_EMAIL, addresses);
             fileintent.putExtra(Intent.EXTRA_TEXT, text);
             fileintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             fileintent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(fileintent, "Send Mail"));
-        }
-        
-        catch (Exception e){
+        } catch (Exception e) {
 
             Toast.makeText(getContext(), "Can", Toast.LENGTH_SHORT).show();
-            
+
         }
-       
 
 
     }

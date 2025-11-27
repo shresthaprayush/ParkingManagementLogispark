@@ -3,7 +3,6 @@ package com.logispark.parkingmanagementlogispark.Adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -20,10 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.logispark.parkingmanagementlogispark.IminPrinter.IminPrinterHelper;
 import com.logispark.parkingmanagementlogispark.R;
-import com.logispark.parkingmanagementlogispark.main.MainActivity;
-import com.logispark.parkingmanagementlogispark.main.QrActivity;
+import com.logispark.parkingmanagementlogispark.Sumni.SunmiPrintHelper;
 import com.logispark.parkingmanagementlogispark.main.SearchToken;
-import com.logispark.parkingmanagementlogispark.models.ModelDriver;
 import com.logispark.parkingmanagementlogispark.models.ModelEstimate;
 import com.logispark.parkingmanagementlogispark.models.ModelParkingData;
 import com.logispark.parkingmanagementlogispark.models.ModelParkingSlip;
@@ -31,7 +28,9 @@ import com.logispark.parkingmanagementlogispark.models.ModelPrintTable;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
 import com.logispark.parkingmanagementlogispark.utilites.DbHandler;
 import com.logispark.parkingmanagementlogispark.utilites.TimePassedCalculator;
+import com.logispark.parkingmanagementlogispark.utilites.TimeUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +57,8 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
         return new ParkingDataViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull ParkingDataViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
@@ -66,7 +67,7 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
         ticket = modelParkingData.getTicketCode();
         vehicleNumber = modelParkingData.getVehicleNumber();
         amount = String.valueOf(modelParkingData.getAmount());
-        date = modelParkingData.getInTime();
+        date = TimeUtils.formatTime(modelParkingData.getInTime().substring(11));
         Dialog confirmationDialouge;
         confirmationDialouge = new Dialog(activity);
         confirmationDialouge.setContentView(R.layout.dialougeconfirmation);
@@ -92,15 +93,13 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
             public void onClick(View view) {
                 ModelVehicleRate modelVehicle = dbHandler.searchByVechileId(modelParkingData.getVechileId());
 
-                int days = -1;
+                int hours = -1;
                 TimePassedCalculator timePassedCalculator = new TimePassedCalculator(context);
-                days = timePassedCalculator.getDaysPassed(modelParkingData);
-                if (days == -1) {
+                hours = timePassedCalculator.getHoursPassed(modelParkingData);
+                if (hours == -1) {
                     Toast.makeText(context, "Error in calculation of time", Toast.LENGTH_SHORT).show();
-                } else if (days == 0) {
-
-                    days = 1;
-
+                } else if (hours == 0) {
+                    hours = 1;
                 }
 
 
@@ -108,29 +107,27 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
                 int accommodation = modelParkingData.getAccommodation();
                 int washing = modelParkingData.getWashing();
                 String ticketNo = modelParkingData.getTicketCode();
-                float subtotal = (cost * days);
+                float subtotal = (cost * hours);
                 float discountAmount = subtotal * ((float) modelParkingData.getDiscount() / 100);
                 subtotal = subtotal - discountAmount;
                 float total = subtotal + washing + accommodation;
 
                 String vecihleType = "Type : " + modelVehicle.getVehicleType();
-                String rate = "Rate : " + String.valueOf(modelParkingData.getRate()) + " /day";
+                String rate = "Rate : " + String.valueOf(modelParkingData.getRate()) + " /hour";
                 String accommodationp = "Accommodation : Nrs. " + String.valueOf(modelParkingData.getAccommodation());
                 String washingp = "Washing : Nrs. " + String.valueOf(modelParkingData.getWashing());
-                String todaysDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
+                String todaysDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(new Date());
                 String vehicleNumberP = "Vehicle Number : " + String.valueOf(modelParkingData.getVehicleNumber());
-                String duration = "Duration : " + Math.ceil(days) + " Days";
-                String totalCost = "Total Cost : Nrs. " + String.valueOf(total);
+                String duration = "Duration : " + timePassedCalculator.getDuration(modelParkingData);
+                String totalCost = "Total Cost : Nrs. " + timePassedCalculator.getTotalCost(modelParkingData);
                 String subTotal = "Sub Total : Nrs. " + String.valueOf(subtotal);
-                String checkInTime = "Check In : " + modelParkingData.getInTime();
+                String checkInTime = "Check In : " + TimeUtils.formatTime(modelParkingData.getInTime().substring(11));
+                String checkOutTime = "Check Out : " + TimeUtils.formatTime(new Date().toString().substring(11));
                 String discount = "Discount : Nrs. " + String.valueOf(discountAmount);
                 String ticketCode = "Ticket No. :" + String.valueOf(ticketNo);
                 String printerIp = "192.168.1.101";
                 int slotId = modelParkingData.getSlot();
-                ModelEstimate modelEstimate = new ModelEstimate(todaysDate, String.valueOf(rate), totalCost, duration, checkInTime, discount, vecihleType, vehicleNumberP, washingp, accommodationp, subTotal, ticketCode);
-//               String date = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
-//               String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-//               String dateTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(new Date());
+                ModelEstimate modelEstimate = new ModelEstimate(todaysDate, String.valueOf(rate), totalCost, duration, checkInTime, checkOutTime, discount, vecihleType, vehicleNumberP, washingp, accommodationp, subTotal, ticketCode);
 
                 ModelVehicleRate modelVehicleRate = dbHandler.searchVehicleFromRate(modelParkingData.getRate());
                 int vechileRateId = modelVehicleRate.getId();
@@ -145,11 +142,11 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
                 ModelParkingSlip modelParkingSlip = new ModelParkingSlip(modelParkingData.getVehicleNumber(),
                         modelParkingData.getRate(),
                         modelParkingData.getTicketCode(), modelParkingData.getInTime().substring(0, 10),
-                        modelParkingData.getInTime().substring(11, 19),
+                        TimeUtils.formatTime(modelParkingData.getInTime().substring(11, 19)),
                         null, vehicleTypes,
                         acc, was);
 
-                int finalDays = days;
+                int finalHours = hours;
                 btnestimate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -164,14 +161,14 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
 
                         modelParkingData.setActive(0);
                         modelParkingData.setOutTime(todaysDate);
-                        modelParkingData.setDuration(finalDays);
+                        modelParkingData.setDuration(finalHours);
                         modelParkingData.setAmount(total);
 
                         //getting Driver Data
                         long driverId = modelParkingDataList.get(position).getDriverId();
                         Log.d("Invoice Count",String.valueOf(estimateCount));
-                        boolean printResult = iminPrinterHelper.printEstimate(modelEstimate, estimateCount);
-
+//                        boolean printResult = SunmiPrintHelper.getInstance().printEstimate(activity.getApplicationContext(), modelEstimate);
+                        boolean printResult =  true;
                         if (printResult) {
 
                             dbHandler.updatePrint(modelParkingData.getId(), 0, estimateCount + 1);
@@ -204,7 +201,8 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
                         if (modelPrintTable.getSlipCount() != -1) {
                             slipCount = modelPrintTable.getSlipCount();
                         }
-                        boolean printResult = iminPrinterHelper.printReceipt(modelParkingSlip, slipCount);
+//                        boolean printResult = iminPrinterHelper.printReceipt(modelParkingSlip, slipCount);
+                        boolean printResult = SunmiPrintHelper.getInstance().printParkingSlip(modelParkingSlip);
 
 
                         if (printResult) {

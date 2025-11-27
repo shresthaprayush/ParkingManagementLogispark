@@ -7,6 +7,7 @@ public class ModelEstimate {
     private String totalCost;
     private String duration;
     private String checkInTime;
+    private String checkOutTime;
     private String discount;
     private String vehicleType;
     private String vehicleNumber;
@@ -16,12 +17,13 @@ public class ModelEstimate {
     private String uniqueId;
 
 
-    public ModelEstimate(String date, String rate, String totalCost, String duration, String checkInTime, String discount, String vehicleType, String vehicleNumber, String washing, String accommodation, String subTotal, String uniqueId) {
+    public ModelEstimate(String date, String rate, String totalCost, String duration, String checkInTime, String checkOutTime, String discount, String vehicleType, String vehicleNumber, String washing, String accommodation, String subTotal, String uniqueId) {
         this.date = date;
         this.rate = rate;
         this.totalCost = totalCost;
         this.duration = duration;
         this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
         this.discount = discount;
         this.vehicleType = vehicleType;
         this.vehicleNumber = vehicleNumber;
@@ -70,6 +72,15 @@ public class ModelEstimate {
     public void setCheckInTime(String checkInTime) {
         this.checkInTime = checkInTime;
     }
+
+    public String getCheckOutTime() {
+        return checkOutTime;
+    }
+
+    public void setCheckOutTime(String checkInTime) {
+        this.checkOutTime = checkOutTime;
+    }
+
 
     public String getDiscount() {
         return discount;
