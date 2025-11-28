@@ -26,6 +26,7 @@ import com.logispark.parkingmanagementlogispark.models.ModelParkingData;
 import com.logispark.parkingmanagementlogispark.models.ModelParkingSlip;
 import com.logispark.parkingmanagementlogispark.models.ModelPrintTable;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
+import com.logispark.parkingmanagementlogispark.utilites.BackupManager;
 import com.logispark.parkingmanagementlogispark.utilites.DbHandler;
 import com.logispark.parkingmanagementlogispark.utilites.TimePassedCalculator;
 import com.logispark.parkingmanagementlogispark.utilites.TimeUtils;
@@ -41,11 +42,13 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
     private Context context;
     private List<ModelParkingData> modelParkingDataList;
     private Activity activity;
+    private BackupManager backupManager;
 
     public ParkingDataAdapter(Context context, List<ModelParkingData> modelParkingDataList, Activity activity) {
         this.context = context;
         this.modelParkingDataList = modelParkingDataList;
         this.activity = activity;
+        this.backupManager = new BackupManager(context);
     }
 
     @NonNull
@@ -128,7 +131,7 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
                 String printerIp = "192.168.1.101";
                 int slotId = modelParkingData.getSlot();
                 ModelEstimate modelEstimate = new ModelEstimate(todaysDate, String.valueOf(rate), totalCost, duration, checkInTime, checkOutTime, discount, vecihleType, vehicleNumberP, washingp, accommodationp, subTotal, ticketCode);
-
+                Log.d("modelEstimate", modelEstimate.toString());
                 ModelVehicleRate modelVehicleRate = dbHandler.searchVehicleFromRate(modelParkingData.getRate());
                 int vechileRateId = modelVehicleRate.getId();
                 String vehicleTypes = modelVehicleRate.getVehicleType();
@@ -166,8 +169,15 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
 
                         //getting Driver Data
                         long driverId = modelParkingDataList.get(position).getDriverId();
+
+                        /// uncomment  for Summi v2 Printer
                         boolean printResult = SunmiPrintHelper.getInstance().printEstimate(activity.getApplicationContext(), modelEstimate);
+                        SunmiPrintHelper.getInstance().feedPaper();
                         if (printResult) {
+
+                            // Create a backup
+                            List<ModelParkingData> parkingDataList = dbHandler.getAllParkingData();
+                            backupManager.createBackup(parkingDataList);
 
                             dbHandler.updatePrint(modelParkingData.getId(), 0, estimateCount + 1);
 

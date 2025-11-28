@@ -2,13 +2,13 @@ package com.logispark.parkingmanagementlogispark.models;
 
 public class ModelParkingData {
 
-    public int id,rate,slot,active,discount,duration,sync,tokenNo,accommodation,washing,is30MinActivation,exceedingLimit,halfHourCost;
-    public String ticketCode,inTime,outTime,vehicleNumber,createdAt,slotName;
+    public int id, rate, slot, active, discount, duration, sync, tokenNo, accommodation, washing, is30MinActivation, exceedingLimit, halfHourCost;
+    public String ticketCode, inTime, outTime, vehicleNumber, createdAt, slotName;
     public double amount;
-    public long vechileId,driverId;
+    public long vechileId, driverId;
 
 
-    public ModelParkingData(int id, int rate, int slot, int active, int discount, int duration, int sync, int tokenNo, int accommodation, int washing, String ticketCode, String inTime, String outTime, String vehicleNumber, String createdAt, String slotName, double amount, long vechileId, long driverId,int is30MinActivation,int exceedingLimit, int halfHourCost) {
+    public ModelParkingData(int id, int rate, int slot, int active, int discount, int duration, int sync, int tokenNo, int accommodation, int washing, String ticketCode, String inTime, String outTime, String vehicleNumber, String createdAt, String slotName, double amount, long vechileId, long driverId, int is30MinActivation, int exceedingLimit, int halfHourCost) {
         this.id = id;
         this.rate = rate;
         this.slot = slot;
@@ -193,7 +193,7 @@ public class ModelParkingData {
     public void setDriverId(long driverId) {
         this.driverId = driverId;
     }
-    
+
     public int getIs30MinActivation() {
         return is30MinActivation;
     }
@@ -209,5 +209,5 @@ public class ModelParkingData {
     public void setExceedingLimit(int exceedingLimit) {
         this.exceedingLimit = exceedingLimit;
     }
-    
+
 }

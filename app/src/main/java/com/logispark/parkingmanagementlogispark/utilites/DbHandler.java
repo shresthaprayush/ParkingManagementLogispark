@@ -74,7 +74,7 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String COLUMN_PARKINGTABLEID = "parkingID";
     private static final String COLUMN_INVOICECOUNT = "invoiceCount";
     private static final String COLUMN_SLIPCOUNT = "slipCount";
-    private static final String COLUMN_THIRTY_MIN_ACTIVATION = "isThirtyMinActivation";
+    private static final String COLUMN_THIRTY_MIN_ACTIVATION = "is30MinActivation";
     private static final String COLUMN_EXCEEDING_LIMIT = "exceedingLimit";
     private static final String COLUMN_HALF_HOUR_COST = "halfHourCost";
 
@@ -1065,6 +1065,50 @@ public class DbHandler extends SQLiteOpenHelper {
             return new ModelVehicleRate(-1, 0, 0, "", 0, "", 0, 0, 0);
         }
 
+
+    }
+    public List<ModelParkingData> getAllParkingData() {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<ModelParkingData> modelParkingDataList = new ArrayList<>();
+        String sql = "SELECT * FROM " + PARKING_TABLE;
+
+        Cursor c = sqLiteDatabase.rawQuery(sql, null);
+
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String ticketCode = c.getString(1);
+            long vehicleId = c.getLong(2);
+            String inTime = c.getString(3);
+            String outTime = c.getString(4);
+            String createdAt = c.getString(5);
+            int tokenNo = c.getInt(6);
+            int driverId = c.getInt(7);
+            int active = c.getInt(8);
+            int rate = c.getInt(9);
+            int discount = c.getInt(10);
+            double amount = c.getDouble(11);
+            int duration = c.getInt(12);
+            int syncStatus = c.getInt(13);
+            int slotId = c.getInt(14);
+            String vehiclenumber = c.getString(15);
+            String slot = c.getString(16);
+            int accommodation = c.getInt(17);
+            int washing = c.getInt(18);
+            int is30MinActivation = c.getInt(19);
+            int exceedingLimit = c.getInt(20);
+            int halfHourCost = c.getInt(21);
+
+
+            ModelParkingData modelParkingData = new ModelParkingData(id, rate, slotId, active, discount, duration, syncStatus, tokenNo, accommodation, washing, ticketCode, inTime, outTime, vehiclenumber, createdAt, slot, amount, vehicleId, driverId, is30MinActivation, exceedingLimit, halfHourCost);
+            modelParkingDataList.add(modelParkingData);
+
+        }
+
+
+        c.close();
+        sqLiteDatabase.close();
+
+        return modelParkingDataList;
 
     }
 }

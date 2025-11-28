@@ -38,6 +38,7 @@ import com.logispark.parkingmanagementlogispark.models.ModelParkingData;
 import com.logispark.parkingmanagementlogispark.models.ModelPrintTable;
 import com.logispark.parkingmanagementlogispark.models.ModelSucessSaveData;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
+import com.logispark.parkingmanagementlogispark.utilites.BackupManager;
 import com.logispark.parkingmanagementlogispark.utilites.DbHandler;
 import com.logispark.parkingmanagementlogispark.utilites.JsonConvertor;
 import com.logispark.parkingmanagementlogispark.utilites.RetrofitClient;
@@ -49,6 +50,7 @@ import com.logispark.parkingmanagementlogispark.utilites.TimeUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -73,6 +75,7 @@ public class QrActivity extends CaptureActivity {
     private int active = 0;
     private Call<ModelSucessSaveData> callSaveSuccessData;
     Call<ModelActivateTable> callDectivate;
+    private BackupManager backupManager;
 
     @Override
     public int getLayoutId() {
@@ -89,6 +92,7 @@ public class QrActivity extends CaptureActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24);
 
         dbHandler = new DbHandler(getApplicationContext());
+        backupManager = new BackupManager(getApplicationContext());
 
 
         init();
@@ -222,6 +226,10 @@ public class QrActivity extends CaptureActivity {
         boolean printResult = SunmiPrintHelper.getInstance().printEstimate(getApplicationContext(),modelEstimate);
 
         if (printResult) {
+
+            // Create a backup
+            List<ModelParkingData> parkingDataList = dbHandler.getAllParkingData();
+            backupManager.createBackup(parkingDataList);
 
             ModelPrintTable modelPrintTable = new ModelPrintTable((int) modelParkingData.getId(),1,0);
             dbHandler.addPrintTable(modelPrintTable);

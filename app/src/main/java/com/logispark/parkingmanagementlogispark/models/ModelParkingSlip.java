@@ -19,6 +19,18 @@ public class ModelParkingSlip {
         this.accommodation = accommodation;
         this.washing = washing;
     }
+    @Override
+    public String toString() {
+        return "ModelParkingSlip{" +
+                "vehicleNumber='" + vechileNumber + '\'' +
+                ", rate=" + rate +
+                ", uniqueId='" + uniqueId + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", selectedSlot='" + slotName + '\'' +
+                ", vehicleType='" + vehicleType + '\'' +
+                '}';
+    }
 
     public String getVechileNumber() {
         return vechileNumber;
@@ -91,4 +103,7 @@ public class ModelParkingSlip {
     public void setWashing(boolean washing) {
         this.washing = washing;
     }
+
+
+
 }

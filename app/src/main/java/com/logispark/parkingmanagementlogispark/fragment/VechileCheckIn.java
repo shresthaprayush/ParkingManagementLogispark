@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,6 +35,7 @@ import com.logispark.parkingmanagementlogispark.models.ModelParkingData;
 import com.logispark.parkingmanagementlogispark.models.ModelParkingSlip;
 import com.logispark.parkingmanagementlogispark.models.ModelPrintTable;
 import com.logispark.parkingmanagementlogispark.models.ModelVehicleRate;
+import com.logispark.parkingmanagementlogispark.utilites.BackupManager;
 import com.logispark.parkingmanagementlogispark.utilites.DbHandler;
 import com.logispark.parkingmanagementlogispark.utilites.RetrofitClient;
 import com.logispark.parkingmanagementlogispark.utilites.SharedPreferenceManager;
@@ -73,6 +73,7 @@ public class VechileCheckIn extends Fragment {
     private ProgressBar progressBar;
     private ModelDeviceSpecificInformation deviceSpecificInformation;
     private CheckInRatesAdapter checkInRatesAdapter;
+    private BackupManager backupManager;
 
 
     @SuppressLint("SetTextI18n")
@@ -95,6 +96,7 @@ public class VechileCheckIn extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_vechile_check_in, container, false);
         dbHandler = new DbHandler(getContext());
+        backupManager = new BackupManager(getContext());
 
 
         deviceSpecificInformation = SharedPreferenceManager.getmInstance(getContext()).getDeviceInformation();
@@ -192,6 +194,9 @@ public class VechileCheckIn extends Fragment {
         presult = dbHandler.addParkingData(modelParkingData);
         SharedPreferenceManager.getmInstance(getContext()).save_token_number(tokenNumber);
 
+        // Create a backup
+        List<ModelParkingData> parkingDataList = dbHandler.getAllParkingData();
+        backupManager.createBackup(parkingDataList);
 
 
         if (deviceSpecificInformation.isSysncStatus()) {
@@ -294,7 +299,6 @@ public class VechileCheckIn extends Fragment {
         /// todo uncomment for printer
         boolean success = SunmiPrintHelper.getInstance().printParkingSlip(modelParkingSlip);
         SunmiPrintHelper.getInstance().feedPaper();
-
         if (success) {
             clean();
         } else {
@@ -329,7 +333,7 @@ public class VechileCheckIn extends Fragment {
      *
      * @param rate
      */
-    public void getRate(int rate, int d,String name, int is30MinActivation, int exceedingLimit, int halfHourCost) {
+    public void getRate(int rate, int d, String name, int is30MinActivation, int exceedingLimit, int halfHourCost) {
 
         discount = d;
         rateName = name;

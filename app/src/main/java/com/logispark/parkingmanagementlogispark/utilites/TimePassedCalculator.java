@@ -69,45 +69,70 @@ public class TimePassedCalculator {
             return "Error";
         }
     }
-    public String getTotalCost(ModelParkingData modelParkingData) {
-        int cost = modelParkingData.getRate();
-        int is30MinActivation = modelParkingData.getIs30MinActivation();
-        int halfHourCost = modelParkingData.getHalfHourCost();
-        long chargeableMinutes = getChargeableMinutes(modelParkingData);
+public String getTotalCost(ModelParkingData modelParkingData) {
 
-        if (chargeableMinutes < 0) {
-            return "Error";
-        }
-        if (chargeableMinutes<60){
-         return String.valueOf(cost);
-        }
-        if (is30MinActivation == 1) {
-            double totalCost;
-            // Convert minutes → hours & minutes
-            int hoursPart = Math.toIntExact(chargeableMinutes / 60);
-            long minutesPart = chargeableMinutes % 60;
+    int cost = modelParkingData.getRate();                    // Cost per hour
+    int halfHourCost = modelParkingData.getHalfHourCost();    // Exact half-hour cost
+    int is30MinActivation = modelParkingData.getIs30MinActivation();
 
-            if (minutesPart <= 30) {
-                totalCost =  halfHourCost + (hoursPart * cost);
-            }else {
-                totalCost = (hoursPart + 1) * cost;
-            }
+    long chargeableMinutes = getChargeableMinutes(modelParkingData);
 
-//            double totalCost = Math.ceil(chargeableMinutes / 30.0) * (cost / 2.0);
-            return String.valueOf(totalCost);
-        } else {
-            int hours;
-            hours = (int) Math.ceil(chargeableMinutes / 60.0);
-            double totalCost = (double) hours * cost;
-            return String.valueOf(totalCost);
-        }
+    if (chargeableMinutes < 0) return "Error";
+
+    Log.d("Billing", "Chargeable Minutes: " + chargeableMinutes);
+
+    // Minimum charge rule: if less than 60 minutes → charge 1 hour
+    if (chargeableMinutes < 60) {
+        Log.d("Billing", "Less than 60 mins → Charge = " + cost);
+        return String.valueOf(cost);
     }
+
+    // -------------------------------
+    // 🔹 30-MINUTE BILLING ACTIVATED
+    // -------------------------------
+    if (is30MinActivation == 1) {
+        int hoursPart = (int) (chargeableMinutes / 60);
+        long minutesPart = chargeableMinutes % 60;
+
+        Log.d("Billing", "Hours: " + hoursPart + " | Minutes: " + minutesPart);
+
+        double totalCost;
+
+        if (minutesPart == 0) {
+            // Exact hour → No extra charge
+            totalCost = hoursPart * cost;
+
+        } else if (minutesPart <= 30) {
+            // Extra half hour
+            totalCost = (hoursPart * cost) + halfHourCost;
+
+        } else {
+            // Charge full extra hour
+            totalCost = (hoursPart + 1) * cost;
+        }
+
+        Log.d("Billing", "Total Cost (30-min Activated): " + totalCost);
+        return String.valueOf(totalCost);
+    }
+
+    // -------------------------------
+    // 🔹 NORMAL HOURLY BILLING
+    // -------------------------------
+    int hours = (int) Math.ceil(chargeableMinutes / 60.0);
+    double totalCost = hours * cost;
+
+    Log.d("Billing", "Total Cost (Normal): " + totalCost);
+    return String.valueOf(totalCost);
+}
+
+
+
     private long getChargeableMinutes(ModelParkingData modelParkingData) {
         try {
             SimpleDateFormat dtf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
             String inTime = modelParkingData.getInTime();
+//            String inTime = "2025/11/28 10:40:01";
             String endTime = dtf.format(new Date());
-
             Date start = dtf.parse(inTime);
             Date end = dtf.parse(endTime);
 
@@ -117,6 +142,8 @@ public class TimePassedCalculator {
 
             long diff = end.getTime() - start.getTime();
             long totalMinutes = diff / (1000 * 60);
+            Log.d("TimeParts", "Total Minutes: " + totalMinutes);
+
             long exceedingLimit = modelParkingData.getExceedingLimit();
 
             return Math.max(0, totalMinutes - exceedingLimit);

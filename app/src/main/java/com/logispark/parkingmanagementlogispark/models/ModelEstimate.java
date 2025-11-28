@@ -32,6 +32,25 @@ public class ModelEstimate {
         this.subTotal = subTotal;
         this.uniqueId = uniqueId;
     }
+    @Override
+    public String toString() {
+        return "ModelEstimate{" +
+                "todaysDate='" + date + '\'' +
+                ", rate='" + rate + '\'' +
+                ", totalCost='" + totalCost + '\'' +
+                ", duration='" + duration + '\'' +
+                ", checkInTime='" + checkInTime + '\'' +
+                ", checkOutTime='" + checkOutTime + '\'' +
+                ", discount='" + discount + '\'' +
+                ", vehicleType='" + vehicleType + '\'' +
+                ", vehicleNumber='" + vehicleNumber + '\'' +
+                ", washing='" + washing + '\'' +
+                ", accommodation='" + accommodation + '\'' +
+                ", subTotal='" + subTotal + '\'' +
+                ", ticketCode='" + uniqueId + '\'' +
+                '}';
+    }
+
 
     public String getDate() {
         return date;

@@ -8,7 +8,7 @@ public class ModelVehicleRate {
     int syncStatus;
     @SerializedName("name")
     String vehicleType;
-    int isThirtyMinActivation;
+    int is30MinActivation;
     int exceedingLimit;
     int halfHourCost;
 
@@ -20,18 +20,18 @@ public class ModelVehicleRate {
         this.serverId = serverId;
         this.syncStatus = syncStatus;
         this.vehicleType = vehicleType;
-        this.isThirtyMinActivation = isThirtyMinActivation;
+        this.is30MinActivation = isThirtyMinActivation;
         this.exceedingLimit = exceedingLimit;
         this.halfHourCost = halfHourCost;
     }
 
 
     public int getIsThirtyMinActivation() {
-        return isThirtyMinActivation;
+        return is30MinActivation;
     }
 
     public void setIsThirtyMinActivation(int isThirtyMinActivation) {
-        this.isThirtyMinActivation = isThirtyMinActivation;
+        this.is30MinActivation = isThirtyMinActivation;
     }
 
     public int getExceedingLimit() {

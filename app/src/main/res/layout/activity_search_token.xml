@@ -14,11 +14,11 @@
         android:id="@+id/searchHeader">
 
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/editTextSearch"
+            android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Enter Vechile Number"
-            android:id="@+id/editTextSearch"/>
+            android:hint="Enter Vechile Number" />
 
         <Button
             android:layout_width="match_parent"
