@@ -292,10 +292,9 @@ public class VechileCheckIn extends Fragment {
 
         // Changes for Sunmi Printer
         /// todo uncomment for printer
-//        boolean success = SunmiPrintHelper.getInstance().printParkingSlip(modelParkingSlip);
-//        SunmiPrintHelper.getInstance().feedPaper();
+        boolean success = SunmiPrintHelper.getInstance().printParkingSlip(modelParkingSlip);
+        SunmiPrintHelper.getInstance().feedPaper();
 
-        boolean success = true;
         if (success) {
             clean();
         } else {

@@ -386,7 +386,7 @@ public class SunmiPrintHelper {
             int paper = sunmiPrinterService.getPrinterPaper();
             sunmiPrinterService.printerInit(null);
 
-            String companyName = "Logispark Parking System";
+            String companyName = "Parking Management System";
             sunmiPrinterService.setAlignment(1, null);
             sunmiPrinterService.printTextWithFont(companyName + "\n\n", null, 32, null);
 

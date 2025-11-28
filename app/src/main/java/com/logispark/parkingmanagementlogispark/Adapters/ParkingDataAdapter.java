@@ -166,9 +166,7 @@ public class ParkingDataAdapter extends RecyclerView.Adapter<ParkingDataAdapter.
 
                         //getting Driver Data
                         long driverId = modelParkingDataList.get(position).getDriverId();
-                        Log.d("Invoice Count",String.valueOf(estimateCount));
-//                        boolean printResult = SunmiPrintHelper.getInstance().printEstimate(activity.getApplicationContext(), modelEstimate);
-                        boolean printResult =  true;
+                        boolean printResult = SunmiPrintHelper.getInstance().printEstimate(activity.getApplicationContext(), modelEstimate);
                         if (printResult) {
 
                             dbHandler.updatePrint(modelParkingData.getId(), 0, estimateCount + 1);
